@@ -1,8 +1,8 @@
 package br.edu.utfpr.cp.espjava.crudcidades.visao;
 
 public final class Cidade {
-    private final String nome;
-    private final String estado;
+    private String nome;
+    private String estado;
 
     public Cidade(String nome, String estado) {
         this.nome = nome;
@@ -15,5 +15,13 @@ public final class Cidade {
 
     public String getNome() {
         return nome;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 }
