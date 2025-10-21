@@ -1,7 +1,9 @@
 package br.edu.utfpr.cp.espjava.crudcidades.visao;
 
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,8 +26,18 @@ public class CidadeController {
     }
 
     @PostMapping("/criar")
-    public String criar(Cidade cidade){
-        cidades.add(cidade);
+    public String criar(@Valid Cidade cidade, BindingResult result, Model memoria){
+        if (result.hasErrors()){
+            result.getFieldErrors().forEach(
+                    error -> memoria.addAttribute(error.getField(), error.getDefaultMessage())
+            );
+            memoria.addAttribute("nomeInformado", cidade.getNome());
+            memoria.addAttribute("estadoInformado", cidade.getEstado());
+            memoria.addAttribute("listaCidades", cidades);
+            return "crud";
+        } else {
+            cidades.add(cidade);
+        }
         return "redirect:/";
     }
 
@@ -48,13 +60,10 @@ public class CidadeController {
     };
 
     @PostMapping("/alterar")
-    public String alterar(String nomeAtual, String estadoAtual, Cidade novaCidade) {
+    public String alterar(String nomeAtual, String estadoAtual, Cidade novaCidade, BindingResult result, Model memoria) {
         var cidadeAtual = cidades.stream().filter(cidade -> cidade.getNome().equals(nomeAtual)
                 && cidade.getEstado().equals(estadoAtual)).findAny();
-        if (cidadeAtual.isPresent()) {
-            cidadeAtual.get().setNome(novaCidade.getNome());
-            cidadeAtual.get().setEstado(novaCidade.getEstado());
-        }
+        cidadeAtual.ifPresent(cidade -> criar(cidade, result, memoria));
         return "redirect:/";
     };
 }
