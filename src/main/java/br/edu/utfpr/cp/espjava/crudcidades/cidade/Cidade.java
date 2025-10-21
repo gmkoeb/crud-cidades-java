@@ -1,7 +1,9 @@
-package br.edu.utfpr.cp.espjava.crudcidades.visao;
+package br.edu.utfpr.cp.espjava.crudcidades.cidade;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
+@Data
 public final class Cidade {
     @NotBlank(message = "{app.cidade.blank}")
     @Size(min = 5, max = 60, message = "{app.cidade.size}")
@@ -16,19 +18,15 @@ public final class Cidade {
         this.estado = estado;
     }
 
-    public String getEstado() {
-        return estado;
+    public Cidade clonar(CidadeEntidade cidadeEntidade) {
+        return new Cidade(cidadeEntidade.getNome(), cidadeEntidade.getEstado());
     }
 
-    public String getNome() {
-        return nome;
-    }
+    public CidadeEntidade clonar(){
+        var cidadeEntidade = new CidadeEntidade();
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+        cidadeEntidade.setNome(this.nome);
+        cidadeEntidade.setEstado(this.estado);
+        return cidadeEntidade;
+    };
 }
