@@ -19,7 +19,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         auth -> {
                             auth.requestMatchers("/").hasAnyRole("listar", "admin");
-                            auth.requestMatchers("/criar", "/alterar",  "/preparaAlterar").hasAnyRole("admin");
+                            auth.requestMatchers("/criar", "/alterar",  "/preparaAlterar").hasRole("admin");
                         }
                 ).csrf(AbstractHttpConfigurer::disable)
                 .formLogin(
